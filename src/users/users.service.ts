@@ -12,8 +12,11 @@ export class UsersService {
         private userModel: typeof User,
       ) {}
 
-
     addUser(user: userDto): Promise<UserType>{
         return this.userModel.create(user);
+    }
+
+    getUserByUsername(username: string): Promise<UserType>{
+        return this.userModel.findOne({where :{username}});
     }
 }
