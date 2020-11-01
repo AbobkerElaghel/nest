@@ -1,6 +1,6 @@
 import { AfterCreate, BeforeCreate, Column, Model, Table, NotNull } from 'sequelize-typescript';
-import { hash } from 'bcrypt';
 import { Logger } from '@nestjs/common';
+import HashUtls from '../utils/HashUtls';
 
 @Table
 export class User extends Model<User> {
@@ -14,19 +14,15 @@ export class User extends Model<User> {
   username: string;
 
   @Column({ validate: {
-      isLowercase: true,
-      isUppercase: true,
       isAlphanumeric: true
   }})
   password: string;
 
-  @Column({ allowNull:false, validate: { notNull: true} })
-  salt: string;
-
   @BeforeCreate
    static async hashPassword(instance: User): Promise<void>{
-    Logger.log(`Hashing password for the user - ${instance.username}`);
-    instance.password = await hash(instance.password, 8);
+    Logger.log(`Hashing password for the user - ${instance.username} ...`);
+    const salt = await HashUtls.createSalt();
+    instance.password = await HashUtls.hashPassword(instance.password, salt);
   }
 
   @AfterCreate

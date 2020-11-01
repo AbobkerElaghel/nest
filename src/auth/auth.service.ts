@@ -12,7 +12,6 @@ export class AuthService {
   public async signUp(newUser: userDto): Promise<UserType>{
     const createdUser = await this.usersService.addUser(newUser);
     createdUser.token = this.generateToken(createdUser);
-
     return createdUser;
   };
 

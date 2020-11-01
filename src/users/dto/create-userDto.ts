@@ -6,7 +6,7 @@ export class userDto implements UserType {
         this.username = username;
         this.password = password;
     }
-    name: string;
+    name?: string;
     username: string;
     password: string;
 };
