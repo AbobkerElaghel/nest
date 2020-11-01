@@ -1,4 +1,4 @@
-import { AfterCreate, BeforeCreate, Column, Model, Table, NotNull } from 'sequelize-typescript';
+import { AfterCreate, BeforeCreate, Column, Model, Table } from 'sequelize-typescript';
 import { Logger } from '@nestjs/common';
 import HashUtls from '../utils/HashUtls';
 
@@ -20,9 +20,11 @@ export class User extends Model<User> {
 
   @BeforeCreate
    static async hashPassword(instance: User): Promise<void>{
+    // TODO: CHECK OF THE UNIQUE CONSTRAINT ERROR IS THROWN BEFORE OR AFTER THE HASHING OF THE PASSWORD, IN ORDER TO MAKE SURE THERE IS NOT ROOM FOR EFFICIENCY EXPLOIT.
+
     Logger.log(`Hashing password for the user - ${instance.username} ...`);
     const salt = await HashUtls.createSalt();
-    instance.password = await HashUtls.hashPassword(instance.password, salt);
+    instance.password = await HashUtls.hashPassword(instance.password+process.env.PEPPER, salt);
   }
 
   @AfterCreate
