@@ -1,6 +1,7 @@
-import { AfterCreate, BeforeCreate, Column, Model, Table } from 'sequelize-typescript';
+import { AfterCreate, BeforeCreate, Column, HasMany, Model, Table } from 'sequelize-typescript';
 import { Logger } from '@nestjs/common';
 import HashUtls from '../utils/HashUtls';
+import { Todo } from '../todo/todo.model';
 
 @Table
 export class User extends Model<User> {
@@ -17,6 +18,9 @@ export class User extends Model<User> {
       isAlphanumeric: true
   }})
   password: string;
+
+  @HasMany(() => Todo)
+  todos: Todo[];
 
   @BeforeCreate
    static async hashPassword(instance: User): Promise<void>{

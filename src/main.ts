@@ -6,7 +6,6 @@ import { HttpExceptionFilter } from './exceptions/http-exception.filter';
 async function bootstrap(): Promise<any> {
   const app :INestApplication = await NestFactory.create(AppModule);
   app.useGlobalFilters(new HttpExceptionFilter());
-  console.log();
   return await app.listen(3000);
 }
 
